@@ -25,7 +25,7 @@ class MainHandler(webapp2.RequestHandler):
     def get(self, path):
 
         # Perform redirect
-        if self.request.path == '/install':
+        if self.request.path == '/':
             logging.info('Successfully redirecting ' + self.request.url + ' to ' + installurl);
             self.redirect(installurl, permanent=False)
 
