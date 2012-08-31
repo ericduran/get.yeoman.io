@@ -1,43 +1,39 @@
 #!/usr/bin/env python
-#
-# Copyright 2007 Google Inc.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
+
+"""This module the bootstrap App Engine app for the curl install script."""
+
+__author__ = 'ebidel@gmail.com (Eric Bidelman)'
+
 import webapp2
 import logging
 
 
-installurl = 'https://raw.github.com/yeoman/yeoman/master/setup/install.sh?login=paulirish&token=6d70f2a657b7738d157779c11127528d'
-
 class MainHandler(webapp2.RequestHandler):
 
-    def get(self, path):
+  LOGIN = 'paulirish'
+  TOKEN = '6d70f2a657b7738d157779c11127528d'
+  INSTALL_URL = ('https://raw.github.com/yeoman/yeoman/master/setup/install.sh'
+                 '?login=%s&token=%s' % (LOGIN, TOKEN))
 
-        # Perform redirect
-        if self.request.path == '/':
-            logging.info('Successfully redirecting ' + self.request.url + ' to ' + installurl);
-            self.redirect(installurl, permanent=False)
-
-        else:
-            self.response.out.write('Yo man!')
-            # Log that we didn't know what this was, and redirect to a good default
-            logging.error('Unable to redirect this url: ' + self.request.url);
-
-            # Don't do permanent (301), since we don't know what this is.
-            # Move it into the dictionary above if needed
-            # self.redirect('http://yeoman.io/', permanent=False)
+  def get(self, path):
+    # Redirect everything to install URL.
+    self.redirect(self.INSTALL_URL, permanent=True)
 
 
-app = webapp2.WSGIApplication([(r'/(.*)', MainHandler)],
-                              debug=True)
+def handle_404(request, response, exception):
+  response.write('Oops! Not Found.')
+  response.set_status(404)
+
+def handle_500(request, response, exception):
+  response.write('Oops! Internal Server Error.')
+  response.set_status(500)
+
+
+# App URL routes.
+routes = [
+  (r'/(.*)', MainHandler)
+]
+
+app = webapp2.WSGIApplication(routes, debug=False)
+app.error_handlers[404] = handle_404
+app.error_handlers[500] = handle_500
