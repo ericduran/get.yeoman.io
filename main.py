@@ -74,11 +74,8 @@ class Analytics(object):
 
 class MainHandler(webapp2.RequestHandler):
 
-  # TODO: remove LOGIN and TOKEN when repos are public.
-  LOGIN = 'paulirish'
-  TOKEN = '6d70f2a657b7738d157779c11127528d'
-  INSTALL_URL = ('https://raw.github.com/yeoman/yeoman/master/setup/install.sh'
-                 '?login=%s&token=%s' % (LOGIN, TOKEN))
+  INSTALL_URL = ('https://raw.github.com/yeoman/yeoman/master/setup/install.sh')
+
 
   def get(self, path):
     # Record this hit in Insight.
