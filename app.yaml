@@ -1,5 +1,5 @@
 application: yeoman-io
-version: 0-9-3
+version: 0-9-4
 runtime: python27
 api_version: 1
 threadsafe: yes
